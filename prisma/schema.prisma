@@ -27,3 +27,45 @@ model User {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
+
+model Order {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  user          String        @db.ObjectId
+  totalAmount   Float
+  status        String        @default("pending")
+  paymentStatus String        @default("pending")
+  paymentMethod String
+  startDate     DateTime
+  endDate       DateTime
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  orderDetails  OrderDetail[]
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  order        Order    @relation(fields: [orderId], references: [id])
+  orderId      String   @db.ObjectId
+  car          String   @db.ObjectId
+  pricePerDay  Float
+  days         Int
+  subtotal     Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("orderDetails")
+}
+
+model Brand {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  image       String
+  description String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("brands")
+}
